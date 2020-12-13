@@ -1,0 +1,6 @@
+# IDE Configuration
+.vscode/
+
+# Auto Generated
+target/
+src/test/

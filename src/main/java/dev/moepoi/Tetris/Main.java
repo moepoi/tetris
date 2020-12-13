@@ -84,6 +84,7 @@ public class Main extends JPanel {
     }
 
     public void paint(Graphics g) {
+        super.paint(g);
         drawWall(g);
         drawCurrentOne(g);
         drawNextOne(g);
@@ -91,10 +92,31 @@ public class Main extends JPanel {
 
     public boolean outOfBound() {
         Cell[] cells = currentOne.cells;
-        for (Cell cell: cells) {
-            int _col = cell.getCol();
-            int _row = cell.getRow();
-            if (_col < 0 || _col > col - 1 || _row < 0 || _row > row - 1) {
+        for(Cell cell:cells) {
+            int cellRow = cell.getRow();
+            if (cellRow <= 0 || cellRow >= row-1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean tooLeft() {
+        Cell[] cells = currentOne.cells;
+        for(Cell cell:cells) {
+            int cellCol = cell.getCol();
+            if (cellCol <= 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private boolean tooRight() {
+        Cell[] cells = currentOne.cells;
+        for(Cell cell:cells) {
+            int cellCol = cell.getCol();
+            if (cellCol >= col-1) {
                 return true;
             }
         }
@@ -148,16 +170,14 @@ public class Main extends JPanel {
     }
 
     protected void moveLeftAction() {
-        currentOne.moveLeft();
-        if (coincide() || outOfBound()) {
-            currentOne.moveRight();
+        if (!coincide() && !tooLeft() && !outOfBound()) {
+            currentOne.moveLeft();
         }
     }
 
     protected void moveRightAction() {
-        currentOne.moveRight();
-        if (coincide() || outOfBound()) {
-            currentOne.moveLeft();
+        if (!coincide() && !tooRight() && !outOfBound()) {
+            currentOne.moveRight();
         }
     }
 
@@ -186,22 +206,26 @@ public class Main extends JPanel {
         this.addKeyListener(keylist);
         this.requestFocus();
 
-        while(true) {
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
 
-            if (isDrop()) {
-                currentOne.softDrop();
-            } else {
-                stopDrop();
-                currentOne = nextOne;
-                nextOne = Tetromino.randomOne();
+                    if(isDrop())
+                        currentOne.softDrop();
+                    else {
+                        stopDrop();
+                        currentOne = nextOne;
+                        nextOne = Tetromino.randomOne();
+                    }
+                    repaint();
+                }
             }
-            repaint();
-        }
+        }.start();
     }
 
     public static void main( String[] args ) {
