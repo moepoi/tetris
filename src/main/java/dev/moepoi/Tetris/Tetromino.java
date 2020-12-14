@@ -2,6 +2,8 @@ package dev.moepoi.Tetris;
 
 public class Tetromino {
     protected Cell[] cells = new Cell[4];
+    protected State[] states;
+    protected int index = 10000;
 
     public Tetromino() {
     }
@@ -30,6 +32,36 @@ public class Tetromino {
         for (int i=0; i < cells.length; i++) {
             cells[i].down();
         }
+    }
+
+    public void rotateRight() {
+        index++;
+        int n = index % states.length;
+        State s = states[n];
+        Cell o = cells[0];
+        int row = o.getRow();
+        int col = o.getCol();
+        cells[1].setRow(row + s.row1);
+        cells[1].setCol(col + s.col1);
+        cells[2].setRow(row + s.row2);
+        cells[2].setCol(col + s.col2);
+        cells[3].setRow(row + s.row3);
+        cells[3].setCol(col + s.col3);
+    }
+
+    public void rotateLeft() {
+        index--;
+        int n = index % states.length;
+        State s = states[n % 4];
+        Cell o = cells[0];
+        int row = o.getRow();
+        int col = o.getCol();
+        cells[1].setRow(row + s.row1);
+        cells[1].setCol(col + s.col1);
+        cells[2].setRow(row + s.row2);
+        cells[2].setCol(col + s.col2);
+        cells[3].setRow(row + s.row3);
+        cells[3].setCol(col + s.col3);
     }
 
     public static Tetromino randomOne() {
