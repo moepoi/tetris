@@ -11,8 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class Main extends JPanel {
 
@@ -37,7 +36,7 @@ public class Main extends JPanel {
     private final int col = 10;
 
     private Cell[][] wall = new Cell[row][col];
-    private static final int CELL_SIZE = 26;
+    private static final int CELL_SIZE = 34;
 
     private Tetromino currentOne;
     private Tetromino nextOne;
@@ -94,14 +93,14 @@ public class Main extends JPanel {
         for (Cell cell : cells) {
             int x = cell.getCol() * CELL_SIZE + 260;
             int y = cell.getRow() * CELL_SIZE + 26;
-            g.drawImage(cell.getImage(), x, y, CELL_SIZE, CELL_SIZE, null);
+            g.drawImage(cell.getImage(), x, y, CELL_SIZE + 3, CELL_SIZE + 3, null);
         }
     }
 
     private void drawLevel(final Graphics g) {
-        int x = 291;
-        int y = 196;
-        Font f = new Font(Font.SERIF, Font.BOLD, 30);
+        int x = 545;
+        int y = 196 - 70;
+        Font f = new Font(Font.SERIF, Font.BOLD, 45);
         g.setFont(f);
         int color = 0x667799;
         g.setColor(new Color(color));
@@ -109,8 +108,8 @@ public class Main extends JPanel {
     }
 
     private void drawLines(final Graphics g) {
-        int x = 291;
-        int y = 155;
+        int x = 545;
+        int y = 155 - 70;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
@@ -119,8 +118,8 @@ public class Main extends JPanel {
     }
 
     private void drawScore(final Graphics g) {
-        int x = 291;
-        int y = 115;
+        int x = 545;
+        int y = 115-70;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
@@ -129,24 +128,25 @@ public class Main extends JPanel {
     }
 
     private void drawInstructions(final Graphics g) {
-        int x = 291;
-        int y = 170 + 70;
-        Font f = new Font(Font.SERIF, Font.BOLD, 30);
+        int x = 360;
+        int y = 196 - 35;
+        Font f = new Font(Font.SERIF, Font.BOLD, 40);
         g.setFont(f);
         int color = 0x0080FF;
         g.setColor(new Color(color));
         g.drawString("Keybinds : ", x, y);
-        Font f1 = new Font(Font.SANS_SERIF, Font.BOLD, 15);
+        Font f1 = new Font(Font.SANS_SERIF, Font.BOLD, 25);
         g.setColor(new Color(0x8b0000));
         g.setFont(f1);
         g.drawString("LEFT - Go Left", x, y + 30);
-        g.drawString("RIGHT - Go Right", x, y + 50);
-        g.drawString("DOWN - Go Down Faster", x, y + 70);
-        g.drawString("SPACE - Go Instant Down", x, y + 90);
-        g.drawString("UP - Rotate Shape", x, y + 110);
-        g.drawString("P - Pause the Game", x, y + 130);
-        g.drawString("R - Resume the Game", x, y + 150);
-        g.drawString("Q - Quit the Game", x, y + 170);
+        g.drawString("RIGHT - Go Right", x, y + 55);
+        g.drawString("DOWN - Go Down Faster", x, y + 80);
+        g.drawString("SPACE - Go Instant Down", x, y + 105);
+        g.drawString("UP - Rotate Shape", x, y + 130);
+        g.drawString("P - Pause the Game", x, y + 155);
+        g.drawString("R - Resume the Game", x, y + 180);
+        g.drawString("Q - Quit the Game", x, y + 205);
+        g.drawString("S - Restart the Game", x, y + 230);
     }
 
     public void paint(Graphics g) {
@@ -263,7 +263,6 @@ public class Main extends JPanel {
             this.score += scoreTable[lines];
             this.lines += lines;
             if (isGameOver()) {
-                // System.out.println("Bye!(T_T)");
                 state = GAME_OVER;
             } else {
                 currentOne = nextOne;
@@ -351,7 +350,6 @@ public class Main extends JPanel {
         this.score += scoreTable[lines];
         this.lines += lines;
         if (isGameOver()) {
-            // System.out.println("Bye!(T_T)");
             state = GAME_OVER;
         } else {
             currentOne = nextOne;
@@ -381,6 +379,9 @@ public class Main extends JPanel {
                 break;
             case KeyEvent.VK_Q:
                 System.exit(0);
+                break;
+            case KeyEvent.VK_S:
+                processGameOver(KeyEvent.VK_S);
                 break;
         }
         repaint();
@@ -440,7 +441,7 @@ public class Main extends JPanel {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
         frame.setVisible(true);
-        frame.setSize(530, 580);
+        frame.setSize(800, 720);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
