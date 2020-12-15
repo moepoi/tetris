@@ -1,16 +1,12 @@
 package dev.moepoi.Tetris;
 
 import java.awt.*;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyListener;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,13 +22,25 @@ public class Main extends JPanel {
     private int speed;
     private int interval = 10;
     private Timer timer;
+
     private static int[] scoreTable = {0, 1, 10, 100, 500};
+
     int state = 0;
     private static final int RUNNING = 0;
     private static final int PAUSE = 1;
     private static final int GAME_OVER = 2;
+
     private int score;
     private int lines;
+
+    private final int row = 20;
+    private final int col = 10;
+
+    private Cell[][] wall = new Cell[row][col];
+    private static final int CELL_SIZE = 26;
+
+    private Tetromino currentOne;
+    private Tetromino nextOne;
     
     public static BufferedImage T;
     public static BufferedImage I;
@@ -51,19 +59,10 @@ public class Main extends JPanel {
             Z = ImageIO.read(new FileInputStream ("src/resources/Z.png"));
             L = ImageIO.read(new FileInputStream ("src/resources/L.png"));
             J = ImageIO.read(new FileInputStream ("src/resources/J.png"));
-        } catch (IOException e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
-    private Tetromino currentOne = Tetromino.randomOne();
-    private Tetromino nextOne = Tetromino.randomOne();
-
-    private final int row = 20;
-    private final int col = 10;
-
-    private Cell[][] wall = new Cell[row][col];
-    private static final int CELL_SIZE = 26;
 
     public void drawWall(Graphics g) {
         for (int i=0; i < row; i++) {
@@ -168,7 +167,10 @@ public class Main extends JPanel {
         repaint();
     }
 
-    public boolean outOfBound() {
+    private boolean outOfBound() {
+        if (this.currentOne == null) {
+            return true;
+        }
         final Cell[] cells = this.currentOne.cells;
         for (int i = 0; i < cells.length; i++) {
             final Cell cell = cells[i];
@@ -181,33 +183,15 @@ public class Main extends JPanel {
         return false;
     }
 
-    private boolean tooLeft() {
-        Cell[] cells = currentOne.cells;
-        for(Cell cell:cells) {
-            int cellCol = cell.getCol();
-            if (cellCol <= 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private boolean tooRight() {
-        Cell[] cells = currentOne.cells;
-        for(Cell cell:cells) {
-            int cellCol = cell.getCol();
-            if (cellCol >= col-1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean coincide() {
-        Cell[] cells = currentOne.cells;
-        for (Cell cell: cells) {
-            int _col = cell.getCol();
-            int _row = cell.getRow();
+        if (this.currentOne == null) {
+            return false;
+        }
+        final Cell[] cells = this.currentOne.cells;
+        for (int i = 0; i < cells.length; i++) {
+            final Cell cell = cells[i];
+            final int _row = cell.getRow();
+            final int _col = cell.getCol();
             if (wall[_row][_col] != null) {
                 return true;
             }
@@ -216,13 +200,18 @@ public class Main extends JPanel {
     }
 
     public boolean isDrop() {
-        Cell[] cells = currentOne.cells;
-        for (Cell cell: cells) {
-            int _col = cell.getCol();
-            int _row = cell.getRow();
+        final Cell[] cells = currentOne.cells;
+        for (int i = 0; i < cells.length; i++) {
+            final Cell cell = cells[i];
+            final int _row = cell.getRow();
             if (_row == row - 1) {
                 return false;
             }
+        }
+        for (int i = 0; i < cells.length; i++) {
+            final Cell cell = cells[i];
+            final int _row = cell.getRow();
+            final int _col = cell.getCol();
             if (wall[_row + 1][_col] != null) {
                 return false;
             }
@@ -231,10 +220,11 @@ public class Main extends JPanel {
     }
 
     public void stopDrop() {
-        Cell[] cells = currentOne.cells;
-        for (Cell cell: cells) {
-            int _col = cell.getCol();
-            int _row = cell.getRow();
+        final Cell[] cells = currentOne.cells;
+        for (int i = 0; i < cells.length; i++) {
+            final Cell cell = cells[i];
+            final int _row = cell.getRow();
+            final int _col = cell.getCol();
             wall[_row][_col] = cell;
         }
     }
@@ -261,14 +251,22 @@ public class Main extends JPanel {
     }
 
     protected void moveLeftAction() {
-        if (!coincide() && !tooLeft() && !outOfBound()) {
-            currentOne.moveLeft();
+        if (currentOne == null) {
+            return;
+        }
+        currentOne.moveLeft();
+        if (outOfBound() || coincide()) {
+            currentOne.moveRight();
         }
     }
 
     protected void moveRightAction() {
-        if (!coincide() && !tooRight() && !outOfBound()) {
-            currentOne.moveRight();
+        if (currentOne == null) {
+            return;
+        }
+        currentOne.moveRight();
+        if (outOfBound() || coincide()) {
+            currentOne.moveLeft();
         }
     }
 
@@ -279,8 +277,8 @@ public class Main extends JPanel {
         }
     }
 
-    private boolean fullCells(final int row) {
-        final Cell[] line = wall[row];
+    private boolean fullCells(final int _row) {
+        final Cell[] line = wall[_row];
         for (int i = 0; i < line.length; i++) {
             final Cell cell = line[i];
             if (cell == null) {
@@ -290,8 +288,8 @@ public class Main extends JPanel {
         return true;
     }
 
-    private void deleteRow(final int row) {
-        for (int i = row; i >= 1; i--) {
+    private void deleteRow(final int _row) {
+        for (int i = _row; i >= 1; i--) {
             System.arraycopy(wall[i - 1], 0, wall[i], 0, col);
         }
         Arrays.fill(wall[0], null);
@@ -299,9 +297,9 @@ public class Main extends JPanel {
 
     private int destroyLines() {
         int lines = 0;
-        for (int row = 0; row < row; row++) {
-            if (fullCells(row)) {
-                deleteRow(row);
+        for (int _row = 0; _row < row; _row++) {
+            if (fullCells(_row)) {
+                deleteRow(_row);
                 lines++;
             }
         }
@@ -312,9 +310,9 @@ public class Main extends JPanel {
         final Cell[] cells = nextOne.cells;
         for (int i = 0; i < cells.length; i++) {
             final Cell cell = cells[i];
-            final int row = cell.getRow();
-            final int col = cell.getCol();
-            if (wall[row][col] != null) {
+            final int _row = cell.getRow();
+            final int _col = cell.getCol();
+            if (wall[_row][_col] != null) {
                 return true;
             }
         }
