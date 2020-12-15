@@ -100,7 +100,7 @@ public class Main extends JPanel {
 
     private void drawLevel(final Graphics g) {
         int x = 291;
-        int y = 226 + 56;
+        int y = 196;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
@@ -110,7 +110,7 @@ public class Main extends JPanel {
 
     private void drawLines(final Graphics g) {
         int x = 291;
-        int y = 226;
+        int y = 155;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
@@ -120,12 +120,33 @@ public class Main extends JPanel {
 
     private void drawScore(final Graphics g) {
         int x = 291;
-        int y = 165;
+        int y = 115;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
         g.setColor(new Color(color));
         g.drawString("SCORE:" + score, x, y);
+    }
+
+    private void drawInstructions(final Graphics g) {
+        int x = 291;
+        int y = 170 + 70;
+        Font f = new Font(Font.SERIF, Font.BOLD, 30);
+        g.setFont(f);
+        int color = 0x0080FF;
+        g.setColor(new Color(color));
+        g.drawString("Keybinds : ", x, y);
+        Font f1 = new Font(Font.SANS_SERIF, Font.BOLD, 15);
+        g.setColor(new Color(0x8b0000));
+        g.setFont(f1);
+        g.drawString("LEFT - Go Left", x, y + 30);
+        g.drawString("RIGHT - Go Right", x, y + 50);
+        g.drawString("DOWN - Go Down Faster", x, y + 70);
+        g.drawString("SPACE - Go Instant Down", x, y + 90);
+        g.drawString("UP - Rotate Shape", x, y + 110);
+        g.drawString("P - Pause the Game", x, y + 130);
+        g.drawString("R - Resume the Game", x, y + 150);
+        g.drawString("Q - Quit the Game", x, y + 170);
     }
 
     public void paint(Graphics g) {
@@ -136,11 +157,12 @@ public class Main extends JPanel {
         drawLines(g);
         drawScore(g);
         drawLevel(g);
+        drawInstructions(g);
     }
 
     protected void processPause(int key) {
         switch (key) {
-            case KeyEvent.VK_C:
+            case KeyEvent.VK_R:
                 index = 0;
                 state = RUNNING;
                 break;
@@ -415,7 +437,7 @@ public class Main extends JPanel {
         this.requestFocus(true);
     }
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
         frame.setVisible(true);
         frame.setSize(530, 580);
