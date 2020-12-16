@@ -583,35 +583,3 @@ public class Main extends JPanel implements FocusListener {
     }
 }
 
-// Misal lu tambahin kode disini
-// x = 0
-
-//  truss di server gitlab w udh update
-// x = 1
-// nanti bentrok gbs pull, mksdnya sama sama update gtu?
-// misal di local (laptop lu) lu tambahin kode di line 100 nah di gitlab juga lg update kode di
-// line 100 nah kan kalo git pull itu dia replace yanng baru ke yang lama bentrok ntar
-// Makanya kalo lu update usahain di push ke gitlab
-// Tp ini berlaku kalo misal ada perubahan di tempat (line) yang sama aja sih
-// Jarang terjadi jg
-// w pkir stiap w ubah kode bkalan w push wkwk
-// lu koding dulu di laptop lu
-// ntar baru push (upload)
-// git pull buat download (synced) biar sama kodenya kek di gitlab
-// oh okok, jadi bentrok yg lu mksd itu, w gbsa cba ubah rumus ya? klo mau w msti test local
-// errornya gbs git pull aja soalnya dia synced yang di server ama yang di local
-// kalo local lu berubahnya gk sama kek yang mau di pull sih gk error
-// w ubah di local sma kyk yg di server, artinya ga brubah apapun dong?
-// Local ya local bisa edit sendiri kok lu push ke server biar bisa gw/ yang lain pull aja biar kode nya seragam
-// Kalo gk dipush ya gpp
-// oh iya iya ngerti push pull
-// coba nonton github pak sandhi aja
-// intinya ini udh work sih
-// klo ada projek bru tnggal akses dri lu aja?
-// kalo misal lu mau sambungin git ke project baru gw mksdnya ? iya
-// git clone aja
-// itu copy ssh ato 1 nya lagi
-// gk usah itu mah setup doang
-//  nih w contohin
-// Kecuali lu abis edit kode lu push biar nanti gw pull di laptop gw
-//  Jadi gk bentrok
