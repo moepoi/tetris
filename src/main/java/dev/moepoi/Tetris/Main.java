@@ -582,3 +582,4 @@ public class Main extends JPanel implements FocusListener {
         panel.start();
     }
 }
+
