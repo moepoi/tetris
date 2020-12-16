@@ -3,8 +3,10 @@ package dev.moepoi.Tetris;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyAdapter;
-import java.awt.image.BufferedImage;
 import java.awt.event.KeyListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Timer;
@@ -13,7 +15,7 @@ import java.util.TimerTask;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class Main extends JPanel {
+public class Main extends JPanel implements FocusListener {
 
     private static final long serialVersionUID = 1L;
     private int index;
@@ -22,7 +24,7 @@ public class Main extends JPanel {
     private int interval = 10;
     private Timer timer;
 
-    private static int[] scoreTable = {0, 1, 10, 100, 500};
+    private static int[] scoreTable = { 0, 1, 10, 100, 500 };
 
     int state = 0;
     private static final int RUNNING = 0;
@@ -41,7 +43,7 @@ public class Main extends JPanel {
 
     private Tetromino currentOne;
     private Tetromino nextOne;
-    
+
     public static BufferedImage T;
     public static BufferedImage I;
     public static BufferedImage O;
@@ -55,19 +57,23 @@ public class Main extends JPanel {
 
     static {
         try {
-            T = ImageIO.read(new FileInputStream ("src/resources/T.png"));
-            I = ImageIO.read(new FileInputStream ("src/resources/I.png"));
-            O = ImageIO.read(new FileInputStream ("src/resources/O.png"));
-            S = ImageIO.read(new FileInputStream ("src/resources/S.png"));
-            Z = ImageIO.read(new FileInputStream ("src/resources/Z.png"));
-            L = ImageIO.read(new FileInputStream ("src/resources/L.png"));
-            J = ImageIO.read(new FileInputStream ("src/resources/J.png"));
-            pause = ImageIO.read(new FileInputStream ("src/resources/pause.png"));
-            gameOver = ImageIO.read(new FileInputStream ("src/resources/game-over.png"));
-            quit = ImageIO.read(new FileInputStream ("src/resources/quit.png"));
+            T = ImageIO.read(new FileInputStream("src/resources/T.png"));
+            I = ImageIO.read(new FileInputStream("src/resources/I.png"));
+            O = ImageIO.read(new FileInputStream("src/resources/O.png"));
+            S = ImageIO.read(new FileInputStream("src/resources/S.png"));
+            Z = ImageIO.read(new FileInputStream("src/resources/Z.png"));
+            L = ImageIO.read(new FileInputStream("src/resources/L.png"));
+            J = ImageIO.read(new FileInputStream("src/resources/J.png"));
+            pause = ImageIO.read(new FileInputStream("src/resources/pause.png"));
+            gameOver = ImageIO.read(new FileInputStream("src/resources/game-over.png"));
+            quit = ImageIO.read(new FileInputStream("src/resources/quit.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Main() {
+        addFocusListener(this);
     }
 
     private void drawState(Graphics g) {
@@ -86,8 +92,8 @@ public class Main extends JPanel {
     }
 
     public void drawWall(Graphics g) {
-        for (int i=0; i < row; i++) {
-            for (int j=0; j < col; j++) {
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
                 int x = CELL_SIZE * j;
                 int y = CELL_SIZE * i;
 
@@ -122,7 +128,7 @@ public class Main extends JPanel {
     private void drawLevel(final Graphics g) {
         int x = 545;
         int y = 196 - 70;
-        Font f = new Font(Font.SERIF, Font.BOLD, 45);
+        Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
         g.setColor(new Color(color));
@@ -141,7 +147,7 @@ public class Main extends JPanel {
 
     private void drawScore(final Graphics g) {
         int x = 545;
-        int y = 115-70;
+        int y = 115 - 70;
         Font f = new Font(Font.SERIF, Font.BOLD, 30);
         g.setFont(f);
         int color = 0x667799;
@@ -480,6 +486,16 @@ public class Main extends JPanel {
 
         this.addKeyListener(keylist);
         this.requestFocus(true);
+    }
+
+    @Override
+    public void focusGained(FocusEvent fe){
+        this.requestFocusInWindow();
+    }
+
+    @Override
+    public void focusLost(FocusEvent fe){
+        state = PAUSE;
     }
 
     public static void main(String[] args) {
