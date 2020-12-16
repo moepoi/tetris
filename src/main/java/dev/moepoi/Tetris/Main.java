@@ -528,6 +528,7 @@ public class Main extends JPanel implements FocusListener {
         JFrame frame = new JFrame("Tetris");
         frame.setVisible(true);
         frame.setSize(800, 720);
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
