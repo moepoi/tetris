@@ -28,6 +28,7 @@ public class Main extends JPanel {
     private static final int RUNNING = 0;
     private static final int PAUSE = 1;
     private static final int GAME_OVER = 2;
+    private static final int QUIT = 3;
 
     private int score;
     private int lines;
@@ -48,6 +49,9 @@ public class Main extends JPanel {
     public static BufferedImage Z;
     public static BufferedImage L;
     public static BufferedImage J;
+    public static BufferedImage pause;
+    public static BufferedImage gameOver;
+    public static BufferedImage quit;
 
     static {
         try {
@@ -58,9 +62,27 @@ public class Main extends JPanel {
             Z = ImageIO.read(new FileInputStream ("src/resources/Z.png"));
             L = ImageIO.read(new FileInputStream ("src/resources/L.png"));
             J = ImageIO.read(new FileInputStream ("src/resources/J.png"));
+            pause = ImageIO.read(new FileInputStream ("src/resources/pause.png"));
+            gameOver = ImageIO.read(new FileInputStream ("src/resources/game-over.png"));
+            quit = ImageIO.read(new FileInputStream ("src/resources/quit.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void drawState(Graphics g) {
+        switch (state) {
+            case GAME_OVER:
+                g.drawImage(gameOver, -15, -15, null);
+                break;
+            case PAUSE:
+                g.drawImage(pause, -15, -15, null);
+                break;
+            case QUIT:
+                g.drawImage(quit, -15, -15, null);
+                break;
+        }
+
     }
 
     public void drawWall(Graphics g) {
@@ -158,6 +180,7 @@ public class Main extends JPanel {
         drawScore(g);
         drawLevel(g);
         drawInstructions(g);
+        drawState(g);
     }
 
     protected void processPause(int key) {
@@ -183,6 +206,25 @@ public class Main extends JPanel {
                 this.currentOne = Tetromino.randomOne();
                 break;
             case KeyEvent.VK_Q:
+                System.exit(0);
+                break;
+        }
+        repaint();
+    }
+
+    protected void processQuit(int key) {
+        switch (key) {
+            case KeyEvent.VK_N:
+                index = 0;
+                if (state == GAME_OVER) {
+                    score = lines = index;
+                    wall = new Cell[row][col];
+                    this.nextOne = Tetromino.randomOne();
+                    this.currentOne = Tetromino.randomOne();
+                }
+                state = RUNNING;
+                break;
+            case KeyEvent.VK_Y:
                 System.exit(0);
                 break;
         }
@@ -378,7 +420,7 @@ public class Main extends JPanel {
                 state = PAUSE;
                 break;
             case KeyEvent.VK_Q:
-                System.exit(0);
+                state = QUIT;
                 break;
             case KeyEvent.VK_S:
                 processGameOver(KeyEvent.VK_S);
@@ -422,6 +464,8 @@ public class Main extends JPanel {
                     case GAME_OVER:
                         processGameOver(key);
                         break;
+                    case QUIT:
+                        processQuit(key);
                 }
             }
 
