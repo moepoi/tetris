@@ -582,5 +582,3 @@ public class Main extends JPanel implements FocusListener {
         panel.start();
     }
 }
-
-// Test Commit (Wilzed)
