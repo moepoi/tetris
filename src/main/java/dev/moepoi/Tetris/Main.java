@@ -7,13 +7,19 @@ import java.awt.event.KeyListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 
 public class Main extends JPanel implements FocusListener {
@@ -46,6 +52,9 @@ public class Main extends JPanel implements FocusListener {
     private Tetromino currentOne;
     private Tetromino nextOne;
 
+    private Clip music;
+    private Long musicPosition = 0L;
+
     public static BufferedImage T;
     public static BufferedImage I;
     public static BufferedImage O;
@@ -58,6 +67,7 @@ public class Main extends JPanel implements FocusListener {
     public static BufferedImage gameOver;
     public static BufferedImage quit;
     public static BufferedImage background;
+    public static AudioInputStream audio;
 
     static {
         try {
@@ -73,6 +83,7 @@ public class Main extends JPanel implements FocusListener {
             gameOver = ImageIO.read(new FileInputStream("src/resources/game-over.png"));
             quit = ImageIO.read(new FileInputStream("src/resources/quit.png"));
             background = ImageIO.read(new FileInputStream("src/resources/background.png"));
+            audio = AudioSystem.getAudioInputStream(new File("src/resources/audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,6 +229,7 @@ public class Main extends JPanel implements FocusListener {
             case KeyEvent.VK_R:
                 index = 0;
                 state = RUNNING;
+                resumeMusic();
                 break;
             case KeyEvent.VK_Q:
                 System.exit(0);
@@ -234,6 +246,7 @@ public class Main extends JPanel implements FocusListener {
                 wall = new Cell[row][col];
                 this.nextOne = Tetromino.randomOne();
                 this.currentOne = Tetromino.randomOne();
+                playMusic();
                 break;
             case KeyEvent.VK_Q:
                 System.exit(0);
@@ -253,6 +266,7 @@ public class Main extends JPanel implements FocusListener {
                     this.currentOne = Tetromino.randomOne();
                 }
                 state = RUNNING;
+                resumeMusic();
                 break;
             case KeyEvent.VK_Y:
                 System.exit(0);
@@ -336,6 +350,7 @@ public class Main extends JPanel implements FocusListener {
             this.lines += lines;
             if (isGameOver()) {
                 state = GAME_OVER;
+                stopMusic();
             } else {
                 currentOne = nextOne;
                 nextOne = Tetromino.randomOne();
@@ -429,6 +444,25 @@ public class Main extends JPanel implements FocusListener {
         }
     }
 
+    private void playMusic() {
+        music.setMicrosecondPosition(0L);
+        music.start();
+    }
+
+    private void pauseMusic() {
+        musicPosition = music.getMicrosecondPosition();
+        music.stop();
+    }
+
+    private void resumeMusic() {
+        music.setMicrosecondPosition(musicPosition);
+        music.start();
+    }
+
+    private void stopMusic() {
+        music.stop();
+    }
+
     protected void processRunning(int key) {
         switch (key) {
             case KeyEvent.VK_RIGHT:
@@ -448,9 +482,11 @@ public class Main extends JPanel implements FocusListener {
                 break;
             case KeyEvent.VK_P:
                 state = PAUSE;
+                pauseMusic();
                 break;
             case KeyEvent.VK_Q:
                 state = QUIT;
+                pauseMusic();
                 break;
             case KeyEvent.VK_S:
                 processGameOver(KeyEvent.VK_S);
@@ -462,6 +498,13 @@ public class Main extends JPanel implements FocusListener {
     public void start() {
         state = SPLASH;
         processSplash();
+        try {
+            music = AudioSystem.getClip();
+            music.open(audio);
+            music.start();
+        } catch (LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
         nextOne = Tetromino.randomOne();
         currentOne = Tetromino.randomOne();
         state = RUNNING;
@@ -521,6 +564,7 @@ public class Main extends JPanel implements FocusListener {
 
     @Override
     public void focusLost(FocusEvent fe){
+        pauseMusic();
         state = PAUSE;
     }
 
