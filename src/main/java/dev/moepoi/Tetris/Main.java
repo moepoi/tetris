@@ -446,7 +446,7 @@ public class Main extends JPanel implements FocusListener {
 
     private void playMusic() {
         music.setMicrosecondPosition(0L);
-        music.start();
+        music.loop(-1);
     }
 
     private void pauseMusic() {
@@ -456,7 +456,7 @@ public class Main extends JPanel implements FocusListener {
 
     private void resumeMusic() {
         music.setMicrosecondPosition(musicPosition);
-        music.start();
+        music.loop(-1);
     }
 
     private void stopMusic() {
@@ -501,7 +501,7 @@ public class Main extends JPanel implements FocusListener {
         try {
             music = AudioSystem.getClip();
             music.open(audio);
-            music.start();
+            playMusic();
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
