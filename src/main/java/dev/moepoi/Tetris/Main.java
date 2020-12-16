@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -28,9 +29,10 @@ public class Main extends JPanel implements FocusListener {
 
     int state = 0;
     private static final int RUNNING = 0;
-    private static final int PAUSE = 1;
-    private static final int GAME_OVER = 2;
-    private static final int QUIT = 3;
+    private static final int SPLASH = 1;
+    private static final int PAUSE = 2;
+    private static final int GAME_OVER = 3;
+    private static final int QUIT = 4;
 
     private int score;
     private int lines;
@@ -51,9 +53,11 @@ public class Main extends JPanel implements FocusListener {
     public static BufferedImage Z;
     public static BufferedImage L;
     public static BufferedImage J;
+    public static BufferedImage splash;
     public static BufferedImage pause;
     public static BufferedImage gameOver;
     public static BufferedImage quit;
+    public static BufferedImage background;
 
     static {
         try {
@@ -64,9 +68,11 @@ public class Main extends JPanel implements FocusListener {
             Z = ImageIO.read(new FileInputStream("src/resources/Z.png"));
             L = ImageIO.read(new FileInputStream("src/resources/L.png"));
             J = ImageIO.read(new FileInputStream("src/resources/J.png"));
+            splash = ImageIO.read(new FileInputStream("src/resources/splash.png"));
             pause = ImageIO.read(new FileInputStream("src/resources/pause.png"));
             gameOver = ImageIO.read(new FileInputStream("src/resources/game-over.png"));
             quit = ImageIO.read(new FileInputStream("src/resources/quit.png"));
+            background = ImageIO.read(new FileInputStream("src/resources/background.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,6 +84,9 @@ public class Main extends JPanel implements FocusListener {
 
     private void drawState(Graphics g) {
         switch (state) {
+            case SPLASH:
+                g.drawImage(splash, -15, -15, null);
+                break;
             case GAME_OVER:
                 g.drawImage(gameOver, -15, -15, null);
                 break;
@@ -179,14 +188,29 @@ public class Main extends JPanel implements FocusListener {
 
     public void paint(Graphics g) {
         super.paint(g);
-        drawWall(g);
-        drawCurrentOne(g);
-        drawNextOne(g);
-        drawLines(g);
-        drawScore(g);
-        drawLevel(g);
-        drawInstructions(g);
-        drawState(g);
+        if (state != SPLASH) {
+            g.drawImage(background, 0, 0, null);
+            g.setColor(Color.decode("#1B1D8F"));
+            drawWall(g);
+            drawCurrentOne(g);
+            drawNextOne(g);
+            drawLines(g);
+            drawScore(g);
+            drawLevel(g);
+            drawInstructions(g);
+            drawState(g);
+        } else {
+            drawState(g);
+        }
+    }
+
+    protected void processSplash() {
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        repaint();
     }
 
     protected void processPause(int key) {
@@ -436,6 +460,8 @@ public class Main extends JPanel implements FocusListener {
     }
 
     public void start() {
+        state = SPLASH;
+        processSplash();
         nextOne = Tetromino.randomOne();
         currentOne = Tetromino.randomOne();
         state = RUNNING;
