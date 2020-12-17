@@ -1,5 +1,7 @@
 # IDE Configuration
 .vscode/
+.idea/
+*.iml
 
 # Auto Generated
 target/
