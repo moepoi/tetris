@@ -591,7 +591,7 @@ public class Main extends JPanel implements FocusListener {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Tetris");
+        JFrame frame = new JFrame("UPDATE BRANCH");
         frame.setVisible(true);
         frame.setSize(800, 720);
         frame.setResizable(false);
