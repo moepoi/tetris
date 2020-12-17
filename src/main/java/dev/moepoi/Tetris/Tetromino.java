@@ -17,19 +17,19 @@ public class Tetromino {
     }
 
     public void moveLeft() {
-        for (int i=0; i < cells.length; i++) {
+        for (int i = 0; i < cells.length; i++) {
             cells[i].left();
         }
     }
 
     public void moveRight() {
-        for (int i=0; i < cells.length; i++) {
+        for (int i = 0; i < cells.length; i++) {
             cells[i].right();
         }
     }
 
     public void softDrop() {
-        for (int i=0; i < cells.length; i++) {
+        for (int i = 0; i < cells.length; i++) {
             cells[i].down();
         }
     }
@@ -67,14 +67,28 @@ public class Tetromino {
     public static Tetromino randomOne() {
         Tetromino t = null;
         int n = (int) (Math.random() * 7);
-        switch(n) {
-            case 0: t = new Shape_T(); break;
-            case 1: t = new Shape_I(); break;
-            case 2: t = new Shape_O(); break;
-            case 3: t = new Shape_S(); break;
-            case 4: t = new Shape_Z(); break;
-            case 5: t = new Shape_L(); break;
-            case 6: t = new Shape_J(); break;
+        switch (n) {
+            case 0:
+                t = new Shape_T();
+                break;
+            case 1:
+                t = new Shape_I();
+                break;
+            case 2:
+                t = new Shape_O();
+                break;
+            case 3:
+                t = new Shape_S();
+                break;
+            case 4:
+                t = new Shape_Z();
+                break;
+            case 5:
+                t = new Shape_L();
+                break;
+            case 6:
+                t = new Shape_J();
+                break;
         }
         return t;
     }

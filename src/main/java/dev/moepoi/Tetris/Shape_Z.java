@@ -8,7 +8,7 @@ public class Shape_Z extends Tetromino {
         cells[2] = new Cell(0, 4, Main.Z);
         cells[3] = new Cell(1, 5, Main.Z);
         states = new State[]{new State(0, 0, -1, -1, -1, 0, 0, 1),
-            new State(0, 0, -1, 1, 0, 1, 1, 0)};
+                new State(0, 0, -1, 1, 0, 1, 1, 0)};
     }
 
 }
