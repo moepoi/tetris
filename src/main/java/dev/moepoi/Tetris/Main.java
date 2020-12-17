@@ -1,11 +1,13 @@
 package dev.moepoi.Tetris;
 
+import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,23 +17,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
-import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.swing.*;
-
 public class Main extends JPanel implements FocusListener {
 
     private static final long serialVersionUID = 1L;
     private int index;
     private int level;
     private int speed;
-    private int interval = 10;
-    
+    private final int interval = 10;
+
     private Timer timer;
-    private static int[] scoreTable = { 0, 1, 10, 100, 500 };
+    private static final int[] scoreTable = {0, 1, 10, 100, 500};
 
     int state = 0;
     private static final int RUNNING = 0;
@@ -71,7 +66,7 @@ public class Main extends JPanel implements FocusListener {
     public static BufferedImage background;
     public static AudioInputStream audio;
 
-    private static String basePath = "src/resources/";
+    private static final String basePath = "src/resources/";
 
     static {
         try {
@@ -580,12 +575,12 @@ public class Main extends JPanel implements FocusListener {
     }
 
     @Override
-    public void focusGained(FocusEvent fe){
+    public void focusGained(FocusEvent fe) {
         this.requestFocusInWindow();
     }
 
     @Override
-    public void focusLost(FocusEvent fe){
+    public void focusLost(FocusEvent fe) {
         pauseMusic();
         state = PAUSE;
     }
