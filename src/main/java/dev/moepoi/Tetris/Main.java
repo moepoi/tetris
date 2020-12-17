@@ -71,19 +71,20 @@ public class Main extends JPanel implements FocusListener {
 
     static {
         try {
-            T = ImageIO.read(new FileInputStream("src/resources/T.png"));
-            I = ImageIO.read(new FileInputStream("src/resources/I.png"));
-            O = ImageIO.read(new FileInputStream("src/resources/O.png"));
-            S = ImageIO.read(new FileInputStream("src/resources/S.png"));
-            Z = ImageIO.read(new FileInputStream("src/resources/Z.png"));
-            L = ImageIO.read(new FileInputStream("src/resources/L.png"));
-            J = ImageIO.read(new FileInputStream("src/resources/J.png"));
-            splash = ImageIO.read(new FileInputStream("src/resources/splash.png"));
-            pause = ImageIO.read(new FileInputStream("src/resources/pause.png"));
-            gameOver = ImageIO.read(new FileInputStream("src/resources/game-over.png"));
-            quit = ImageIO.read(new FileInputStream("src/resources/quit.png"));
-            background = ImageIO.read(new FileInputStream("src/resources/background.png"));
-            audio = AudioSystem.getAudioInputStream(new File("src/resources/audio.wav"));
+            String basePath = "src/resources/";
+            T = ImageIO.read(new FileInputStream(basePath + "T.png"));
+            I = ImageIO.read(new FileInputStream(basePath + "I.png"));
+            O = ImageIO.read(new FileInputStream(basePath + "O.png"));
+            S = ImageIO.read(new FileInputStream(basePath + "S.png"));
+            Z = ImageIO.read(new FileInputStream(basePath + "Z.png"));
+            L = ImageIO.read(new FileInputStream(basePath + "L.png"));
+            J = ImageIO.read(new FileInputStream(basePath + "J.png"));
+            splash = ImageIO.read(new FileInputStream(basePath + "splash.png"));
+            pause = ImageIO.read(new FileInputStream(basePath + "pause.png"));
+            gameOver = ImageIO.read(new FileInputStream(basePath + "game-over.png"));
+            quit = ImageIO.read(new FileInputStream(basePath + "quit.png"));
+            background = ImageIO.read(new FileInputStream(basePath + "background.png"));
+            audio = AudioSystem.getAudioInputStream(new File(basePath + "audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -448,7 +449,7 @@ public class Main extends JPanel implements FocusListener {
 
     private void playMusic() {
         music.setMicrosecondPosition(0L);
-        music.start();
+        music.loop(-1);
     }
 
     private void pauseMusic() {
@@ -458,7 +459,7 @@ public class Main extends JPanel implements FocusListener {
 
     private void resumeMusic() {
         music.setMicrosecondPosition(musicPosition);
-        music.start();
+        music.loop(-1);
     }
 
     private void stopMusic() {
@@ -524,7 +525,7 @@ public class Main extends JPanel implements FocusListener {
         try {
             music = AudioSystem.getClip();
             music.open(audio);
-            music.start();
+            playMusic();
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
