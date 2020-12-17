@@ -55,6 +55,8 @@ public class Main extends JPanel implements FocusListener {
     private Clip music;
     private Long musicPosition = 0L;
 
+    private static int THEME = 0;
+
     public static BufferedImage T;
     public static BufferedImage I;
     public static BufferedImage O;
@@ -69,9 +71,10 @@ public class Main extends JPanel implements FocusListener {
     public static BufferedImage background;
     public static AudioInputStream audio;
 
+    private static String basePath = "src/resources/";
+
     static {
         try {
-            String basePath = "src/resources/";
             T = ImageIO.read(new FileInputStream(basePath + "T.png"));
             I = ImageIO.read(new FileInputStream(basePath + "I.png"));
             O = ImageIO.read(new FileInputStream(basePath + "O.png"));
@@ -83,7 +86,7 @@ public class Main extends JPanel implements FocusListener {
             pause = ImageIO.read(new FileInputStream(basePath + "pause.png"));
             gameOver = ImageIO.read(new FileInputStream(basePath + "game-over.png"));
             quit = ImageIO.read(new FileInputStream(basePath + "quit.png"));
-            background = ImageIO.read(new FileInputStream(basePath + "background.png"));
+            background = ImageIO.read(new FileInputStream(basePath + "background-dark.png"));
             audio = AudioSystem.getAudioInputStream(new File(basePath + "audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,8 +199,7 @@ public class Main extends JPanel implements FocusListener {
         g.drawString("R - Resume the Game", x, y + 180);
         g.drawString("Q - Quit the Game", x, y + 205);
         g.drawString("S - Restart the Game", x, y + 230);
-        g.drawString("Z - Change Theme Dark", x, y + 300);
-        g.drawString("X - Change Theme Light", x, y + 325);
+        g.drawString("X - Switch Theme", x, y + 300);
     }
 
     public void paint(Graphics g) {
@@ -466,21 +468,20 @@ public class Main extends JPanel implements FocusListener {
         music.stop();
     }
 
-    private static void changeBGD() {
-        try{
-            background = ImageIO.read(new FileInputStream("src/resources/background.png"));
-        } catch (Exception e) {
+    private static void switchTheme() {
+        try {
+            if (THEME == 0) {
+                background = ImageIO.read(new FileInputStream(basePath + "background-white.png"));
+                THEME = 1;
+            } else {
+                background = ImageIO.read(new FileInputStream(basePath + "background-dark.png"));
+                THEME = 0;
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void changeBGW() {
-        try{
-            background = ImageIO.read(new FileInputStream("src/resources/backgroundW.png"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     protected void processRunning(int key) {
         switch (key) {
             case KeyEvent.VK_RIGHT:
@@ -509,11 +510,8 @@ public class Main extends JPanel implements FocusListener {
             case KeyEvent.VK_S:
                 processGameOver(KeyEvent.VK_S);
                 break;
-            case KeyEvent.VK_Z:
-                changeBGD();
-                break;
             case KeyEvent.VK_X:
-                changeBGW();
+                switchTheme();
                 break;
         }
         repaint();
