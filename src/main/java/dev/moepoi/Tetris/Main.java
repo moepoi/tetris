@@ -87,7 +87,7 @@ public class Main extends JPanel implements FocusListener {
             gameOver = ImageIO.read(new FileInputStream(basePath + "game-over.png"));
             quit = ImageIO.read(new FileInputStream(basePath + "quit.png"));
             background = ImageIO.read(new FileInputStream(basePath + "background-dark.png"));
-            audio = AudioSystem.getAudioInputStream(new File(basePath + "audio.wav"));
+            audio = AudioSystem.getAudioInputStream(new File(basePath + "audio-compressed.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
