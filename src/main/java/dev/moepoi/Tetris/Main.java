@@ -29,8 +29,8 @@ public class Main extends JPanel implements FocusListener {
     private int level;
     private int speed;
     private int interval = 10;
+    
     private Timer timer;
-
     private static int[] scoreTable = { 0, 1, 10, 100, 500 };
 
     int state = 0;
@@ -71,20 +71,19 @@ public class Main extends JPanel implements FocusListener {
 
     static {
         try {
-            String basePath = "src/resources/";
-            T = ImageIO.read(new FileInputStream(basePath + "T.png"));
-            I = ImageIO.read(new FileInputStream(basePath + "I.png"));
-            O = ImageIO.read(new FileInputStream(basePath + "O.png"));
-            S = ImageIO.read(new FileInputStream(basePath + "S.png"));
-            Z = ImageIO.read(new FileInputStream(basePath + "Z.png"));
-            L = ImageIO.read(new FileInputStream(basePath + "L.png"));
-            J = ImageIO.read(new FileInputStream(basePath + "J.png"));
-            splash = ImageIO.read(new FileInputStream(basePath + "splash.png"));
-            pause = ImageIO.read(new FileInputStream(basePath + "pause.png"));
-            gameOver = ImageIO.read(new FileInputStream(basePath + "game-over.png"));
-            quit = ImageIO.read(new FileInputStream(basePath + "quit.png"));
-            background = ImageIO.read(new FileInputStream(basePath + "background.png"));
-            audio = AudioSystem.getAudioInputStream(new File(basePath + "audio.wav"));
+            T = ImageIO.read(new FileInputStream("src/resources/T.png"));
+            I = ImageIO.read(new FileInputStream("src/resources/I.png"));
+            O = ImageIO.read(new FileInputStream("src/resources/O.png"));
+            S = ImageIO.read(new FileInputStream("src/resources/S.png"));
+            Z = ImageIO.read(new FileInputStream("src/resources/Z.png"));
+            L = ImageIO.read(new FileInputStream("src/resources/L.png"));
+            J = ImageIO.read(new FileInputStream("src/resources/J.png"));
+            splash = ImageIO.read(new FileInputStream("src/resources/splash.png"));
+            pause = ImageIO.read(new FileInputStream("src/resources/pause.png"));
+            gameOver = ImageIO.read(new FileInputStream("src/resources/game-over.png"));
+            quit = ImageIO.read(new FileInputStream("src/resources/quit.png"));
+            background = ImageIO.read(new FileInputStream("src/resources/background.png"));
+            audio = AudioSystem.getAudioInputStream(new File("src/resources/audio.wav"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -196,6 +195,8 @@ public class Main extends JPanel implements FocusListener {
         g.drawString("R - Resume the Game", x, y + 180);
         g.drawString("Q - Quit the Game", x, y + 205);
         g.drawString("S - Restart the Game", x, y + 230);
+        g.drawString("Z - Change Theme Dark", x, y + 300);
+        g.drawString("X - Change Theme Light", x, y + 325);
     }
 
     public void paint(Graphics g) {
@@ -447,7 +448,7 @@ public class Main extends JPanel implements FocusListener {
 
     private void playMusic() {
         music.setMicrosecondPosition(0L);
-        music.loop(-1);
+        music.start();
     }
 
     private void pauseMusic() {
@@ -457,13 +458,28 @@ public class Main extends JPanel implements FocusListener {
 
     private void resumeMusic() {
         music.setMicrosecondPosition(musicPosition);
-        music.loop(-1);
+        music.start();
     }
 
     private void stopMusic() {
         music.stop();
     }
 
+    private static void changeBGD() {
+        try{
+            background = ImageIO.read(new FileInputStream("src/resources/background.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void changeBGW() {
+        try{
+            background = ImageIO.read(new FileInputStream("src/resources/backgroundW.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     protected void processRunning(int key) {
         switch (key) {
             case KeyEvent.VK_RIGHT:
@@ -492,6 +508,12 @@ public class Main extends JPanel implements FocusListener {
             case KeyEvent.VK_S:
                 processGameOver(KeyEvent.VK_S);
                 break;
+            case KeyEvent.VK_Z:
+                changeBGD();
+                break;
+            case KeyEvent.VK_X:
+                changeBGW();
+                break;
         }
         repaint();
     }
@@ -502,7 +524,7 @@ public class Main extends JPanel implements FocusListener {
         try {
             music = AudioSystem.getClip();
             music.open(audio);
-            playMusic();
+            music.start();
         } catch (LineUnavailableException | IOException e) {
             e.printStackTrace();
         }
