@@ -70,13 +70,13 @@ public class Main extends JPanel implements FocusListener {
 
     static {
         try {
-            T = ImageIO.read(new FileInputStream(basePath + "T.png"));
-            I = ImageIO.read(new FileInputStream(basePath + "I.png"));
-            O = ImageIO.read(new FileInputStream(basePath + "O.png"));
-            S = ImageIO.read(new FileInputStream(basePath + "S.png"));
-            Z = ImageIO.read(new FileInputStream(basePath + "Z.png"));
-            L = ImageIO.read(new FileInputStream(basePath + "L.png"));
-            J = ImageIO.read(new FileInputStream(basePath + "J.png"));
+            T = ImageIO.read(new FileInputStream(basePath + "klee.png"));
+            I = ImageIO.read(new FileInputStream(basePath + "keqing.png"));
+            O = ImageIO.read(new FileInputStream(basePath + "jean.png"));
+            S = ImageIO.read(new FileInputStream(basePath + "barbara.png"));
+            Z = ImageIO.read(new FileInputStream(basePath + "diona.png"));
+            L = ImageIO.read(new FileInputStream(basePath + "ningguang.png"));
+            J = ImageIO.read(new FileInputStream(basePath + "qiqi.png"));
             splash = ImageIO.read(new FileInputStream(basePath + "splash.png"));
             pause = ImageIO.read(new FileInputStream(basePath + "pause.png"));
             gameOver = ImageIO.read(new FileInputStream(basePath + "game-over.png"));
