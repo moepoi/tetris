@@ -578,6 +578,8 @@ public class Main extends JPanel implements FocusListener {
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Tetris");
+        ImageIcon icon = new ImageIcon(basePath + "barbara.png");
+        frame.setIconImage(icon.getImage());
         frame.setVisible(true);
         frame.setSize(800, 720);
         frame.setResizable(false);
