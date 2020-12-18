@@ -174,29 +174,6 @@ public class Main extends JPanel implements FocusListener {
         g.drawString("SCORE:" + score, x, y);
     }
 
-    private void drawInstructions(final Graphics g) {
-        int x = 360;
-        int y = 196 - 35;
-        Font f = new Font(Font.SERIF, Font.BOLD, 40);
-        g.setFont(f);
-        int color = 0x0080FF;
-        g.setColor(new Color(color));
-        g.drawString("Keybinds : ", x, y);
-        Font f1 = new Font(Font.SANS_SERIF, Font.BOLD, 25);
-        g.setColor(new Color(0x8b0000));
-        g.setFont(f1);
-        g.drawString("LEFT - Go Left", x, y + 30);
-        g.drawString("RIGHT - Go Right", x, y + 55);
-        g.drawString("DOWN - Go Down Faster", x, y + 80);
-        g.drawString("SPACE - Go Instant Down", x, y + 105);
-        g.drawString("UP - Rotate Shape", x, y + 130);
-        g.drawString("P - Pause the Game", x, y + 155);
-        g.drawString("R - Resume the Game", x, y + 180);
-        g.drawString("Q - Quit the Game", x, y + 205);
-        g.drawString("S - Restart the Game", x, y + 230);
-        g.drawString("X - Switch Theme", x, y + 300);
-    }
-
     private void drawGameOver(final Graphics g) {
         int x = 175;
         int y = 470;
@@ -218,7 +195,6 @@ public class Main extends JPanel implements FocusListener {
             drawLines(g);
             drawScore(g);
             drawLevel(g);
-            drawInstructions(g);
             drawState(g);
             if (state == GAME_OVER) {
                 drawGameOver(g);
