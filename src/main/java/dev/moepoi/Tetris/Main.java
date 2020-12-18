@@ -197,6 +197,16 @@ public class Main extends JPanel implements FocusListener {
         g.drawString("X - Switch Theme", x, y + 300);
     }
 
+    private void drawGameOver(final Graphics g) {
+        int x = 175;
+        int y = 470;
+        Font f = new Font(Font.SERIF, Font.BOLD, 40);
+        g.setFont(f);
+        g.setColor(Color.decode("#49371B"));
+        g.drawString("SCORE : " + score, x, y);
+        g.drawString("LEVEL : " + level, x + 250, y);
+    }
+
     public void paint(Graphics g) {
         super.paint(g);
         if (state != SPLASH) {
@@ -210,6 +220,9 @@ public class Main extends JPanel implements FocusListener {
             drawLevel(g);
             drawInstructions(g);
             drawState(g);
+            if (state == GAME_OVER) {
+                drawGameOver(g);
+            }
         } else {
             drawState(g);
         }
