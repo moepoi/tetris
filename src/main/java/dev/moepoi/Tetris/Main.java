@@ -66,7 +66,7 @@ public class Main extends JPanel implements FocusListener {
     public static BufferedImage background;
     public static AudioInputStream audio;
 
-    private static final String basePath = "src/resources/";
+    private static final String basePath = "src/main/resources/";
 
     static {
         try {
