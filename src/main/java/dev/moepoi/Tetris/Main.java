@@ -594,8 +594,10 @@ public class Main extends JPanel implements FocusListener {
 
     @Override
     public void focusLost(FocusEvent fe) {
-        pauseMusic();
-        state = PAUSE;
+        if (state != GAME_OVER) {
+            pauseMusic();
+            state = PAUSE;
+        }
     }
 
     public static void main(String[] args) {
